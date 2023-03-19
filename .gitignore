@@ -1,4 +1,5 @@
 redis_data
 mongo-volume
-pgdata
+*pgdata*
 bases
+n8n_data
