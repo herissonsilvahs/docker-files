@@ -1,0 +1,17 @@
+version: "3.1"
+services:
+  mongodb5:
+    container_name: 'mongodb5'
+    image: mongo:5
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: teste
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - 27018:27017
+
+volumes:
+  mongo-data:
+    driver: local

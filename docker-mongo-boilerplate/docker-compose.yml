@@ -1,0 +1,30 @@
+version: "3.1"
+services:
+  mongo:
+    container_name: 'mongo'
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: teste
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - 27017:27017
+
+  # app-server:
+  #   container_name: app-server
+  #   restart: always
+  #   build: .
+  #   environment:
+  #     PORT: 3001
+  #   ports:
+  #     - 3001:3001
+  #   depends_on:
+  #     - mongo
+  #   links:
+  #     - mongo
+
+volumes:
+  mongo-data:
+    driver: local
