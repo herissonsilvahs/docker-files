@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: teste
-      POSTGRES_DB: db-example
+      POSTGRES_DB: db-base
     volumes:
       - ./pgdata:/var/lib/postgresql/data
       - ./bases:/home
