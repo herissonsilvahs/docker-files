@@ -3,3 +3,4 @@ mongo-volume
 *pgdata*
 bases
 n8n_data
+.env
