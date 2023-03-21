@@ -12,14 +12,7 @@ $ docker compose up -d
 Now you can access in yor browser htpp://localhost:5678
 
 # Terraform setup digital ocean machine
-create file named "hosts" and add:
-```text
-[n8n]
-one_or_more_hosts
 
-[all:vars]
-ansible_user = root
-```
 Create too file named "terraform.tfvars":
 ```text
 do_token = "your_digitalocean_token"
