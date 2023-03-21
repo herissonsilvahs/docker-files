@@ -1,0 +1,7 @@
+.terraform
+.terraform.lock*
+*.tfvars
+pgdata
+n8n_data
+.env
+*.tfstate

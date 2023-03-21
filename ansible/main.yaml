@@ -1,0 +1,79 @@
+- name: Docker installation
+  hosts: n8n
+  remote_user: root
+  tasks:
+  - name: Install a required packages
+    ansible.builtin.apt:
+      pkg:
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+      state: present
+      update-cache: yes
+  - name: Add repository key to APT
+    ansible.builtin.apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+  - name: Add repository to install docker
+    ansible.builtin.apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu jammy stable
+      state: present
+  - name: Install docker
+    ansible.builtin.apt:
+      pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+      state: present
+      update-cache: yes
+  - name: Start service httpd, if not started
+    ansible.builtin.service:
+      name: docker
+      enabled: yes
+
+- name: Install requirements to docker module
+  hosts: n8n
+  remote_user: root
+  tasks:
+  - name: Install pip
+    ansible.builtin.apt:
+      name: python3-pip
+      state: latest
+      update_cache: yes
+  - name: Install docker python package
+    pip:
+      name: docker
+  - name: Install docker compose python package
+    pip:
+      name: docker-compose
+
+- name: Run docker compose in project
+  hosts: n8n
+  gather_facts: false
+  tasks:
+    - name: Create n8n folder
+      ansible.builtin.command: mkdir -p ./n8n
+
+    - name: Copy compose files
+      copy:
+        src: "./n8n/{{ item }}"
+        dest: "./n8n/{{ item }}"
+      loop:
+        - .env
+        - init-data.sh
+        - docker-compose.yml
+
+    - name: Tear down existing services
+      community.docker.docker_compose:
+        project_src: n8n
+        state: absent
+
+    - name: Create and start services
+      community.docker.docker_compose:
+        project_src: n8n
+        files:
+        - docker-compose.yml
+      register: docker_compose_start
